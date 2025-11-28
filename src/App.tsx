@@ -8,6 +8,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+import Cars from "./components/Cars";
+
 const queryClient = new QueryClient();
 
 function App() {
@@ -23,7 +25,9 @@ function App() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <QueryClientProvider client={queryClient}></QueryClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <Cars />
+      </QueryClientProvider>
     </Container>
   )
 }
