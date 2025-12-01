@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataGrid } from "@mui/x-data-grid";
 import type { GridCellParams, GridColDef } from "@mui/x-data-grid";
 import { Snackbar } from "@mui/material";
-
-import type { CarResponse } from "../types/CarResponse";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import AddCar from "./AddCar";
 import { getCars, deleteCar } from "../api/carAPI";
+import type { CarResponse } from "../types/CarResponse";
 
 function Cars() {
 
@@ -75,6 +75,7 @@ function Cars() {
         return (
 
             <>
+                <AddCar />
                 <DataGrid
                     rows={data}
                     columns={columns}
