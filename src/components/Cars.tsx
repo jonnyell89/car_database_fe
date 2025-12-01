@@ -1,11 +1,29 @@
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataGrid } from "@mui/x-data-grid";
-import type { GridColDef } from "@mui/x-data-grid";
+import type { GridCellParams, GridColDef } from "@mui/x-data-grid";
+import { Snackbar } from "@mui/material";
 
 import type { CarResponse } from "../types/CarResponse";
-import { getCars } from "../api/carAPI";
+import { getCars, deleteCar } from "../api/carAPI";
 
 function Cars() {
+
+    const [open, setOpen] = useState(false);
+
+    const queryClient = useQueryClient();
+
+    const { mutate } = useMutation({
+        
+        mutationFn: deleteCar,
+        onSuccess: () => {
+            setOpen(true);
+            queryClient.invalidateQueries({ queryKey: ["cars"] });
+        },
+        onError: (err: Error) => {
+            console.error(err);
+        },
+    })
 
     const columns: GridColDef[] = [
 
@@ -15,6 +33,19 @@ function Cars() {
         {field: "registrationNumber", headerName: "Reg No", width: 150},
         {field: "modelYear", headerName: "Model Year", width: 150},
         {field: "price", headerName: "Price", width: 150},
+        {
+            field: "delete",
+            headerName: "",
+            width: 90,
+            sortable: false,
+            filterable: false,
+            disableColumnMenu: true,
+            renderCell: (params: GridCellParams) => (
+                <button onClick={() => mutate(params.row._links.car.href)}>
+                    Delete
+                </button>
+            ),
+        },
     ];
 
     const { data, error, isSuccess } = useQuery<CarResponse[], Error>({
@@ -37,11 +68,20 @@ function Cars() {
 
         return (
 
-            <DataGrid
-                rows={data}
-                columns={columns}
-                getRowId={row => row._links.self.href}
-            />
+            <>
+                <DataGrid
+                    rows={data}
+                    columns={columns}
+                    disableRowSelectionOnClick={true}
+                    getRowId={row => row._links.self.href}
+                />
+                <Snackbar
+                    open={open}
+                    autoHideDuration={2000}
+                    onClose={() => setOpen(false)}
+                    message="This car has been deleted"
+                />
+            </>
         )
     }
 
