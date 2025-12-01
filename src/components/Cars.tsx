@@ -31,7 +31,7 @@ function Cars() {
         {field: "model", headerName: "Model", width: 200},
         {field: "colour", headerName: "Colour", width: 200},
         {field: "registrationNumber", headerName: "Reg No", width: 150},
-        {field: "modelYear", headerName: "Model Year", width: 150},
+        {field: "modelYear", headerName: "Year", width: 150},
         {field: "price", headerName: "Price", width: 150},
         {
             field: "delete",
