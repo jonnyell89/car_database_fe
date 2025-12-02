@@ -2,12 +2,16 @@ import { useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import type { CarResponse } from "../types/CarResponse";
 import type { Car } from "../types/Car";
-import { addCar } from "../api/carAPI";
 import CarDialogContent from "./CarDialogContent";
 
-function AddCar() {
+type EditCarProps = {
+
+    carData: CarResponse;
+}
+
+function EditCar({ carData }: EditCarProps) {
 
     const [open, setOpen] = useState(false);
 
@@ -19,20 +23,7 @@ function AddCar() {
         registrationNumber: "",
         modelYear: 0,
         price: 0,
-    })
-
-    const queryClient = useQueryClient();
-
-    const { mutate } = useMutation({
-
-        mutationFn: addCar,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["cars"] });
-        },
-        onError: (err: Error) => {
-            console.error(err);
-        },
-    })
+    });
 
     const handleClickOpen = () => {
 
@@ -46,29 +37,20 @@ function AddCar() {
 
     const handleSave = () => {
 
-        mutate(car);
-        setCar({
-            brand: "",
-            model: "",
-            colour: "",
-            registrationNumber: "",
-            modelYear: 0,
-            price: 0,
-        })
-        handleClose();
+        setOpen(false);
     }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 
-        setCar({...car, [event.target.name]: event.target.value});
+        setCar({ ...car, [event.target.name]: event.target.value });
     }
 
     return (
 
         <>
-            <button onClick={handleClickOpen}>New Car</button>
-            <Dialog maxWidth="xs" open={open} onClose={handleClose}>
-                <DialogTitle>New Car</DialogTitle>
+            <button onClick={handleClickOpen}>Edit</button>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Edit Car</DialogTitle>
                 <CarDialogContent car={car} handleChange={handleChange} />
                 <DialogActions>
                     <button onClick={handleClose}>Cancel</button>
@@ -79,4 +61,4 @@ function AddCar() {
     )
 }
 
-export default AddCar;
+export default EditCar;
