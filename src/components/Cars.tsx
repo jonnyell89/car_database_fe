@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataGrid, } from "@mui/x-data-grid";
-import { GridToolbar } from "@mui/x-data-grid/internals";
 import type { GridCellParams, GridColDef } from "@mui/x-data-grid";
 import { Snackbar } from "@mui/material";
 import type { CarResponse } from "../types/CarResponse";
@@ -94,6 +93,7 @@ function Cars() {
                     columns={columns}
                     disableRowSelectionOnClick={true}
                     getRowId={row => row._links.self.href}
+                    showToolbar
                 />
                 <Snackbar
                     open={open}
