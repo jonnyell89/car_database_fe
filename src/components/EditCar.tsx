@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
-import type { CarResponse } from "../types/CarResponse";
 import type { Car } from "../types/Car";
+import type { CarEntry } from "../types/CarEntry";
+import type { CarResponse } from "../types/CarResponse";
+import { updateCar } from "../api/carAPI";
 import CarDialogContent from "./CarDialogContent";
 
 type EditCarProps = {
@@ -25,7 +28,30 @@ function EditCar({ carData }: EditCarProps) {
         price: 0,
     });
 
+    const clientQuery = useQueryClient();
+
+    const { mutate } = useMutation({
+
+        mutationFn: updateCar,
+        onSuccess: () => {
+            clientQuery.invalidateQueries({ queryKey: ["cars"]});
+        },
+        onError: (err: Error) => {
+            console.error(err);
+        }
+    })
+
     const handleClickOpen = () => {
+
+        setCar({
+
+            brand: carData.brand,
+            model: carData.model,
+            colour: carData.colour,
+            registrationNumber: carData.registrationNumber,
+            modelYear: carData.modelYear,
+            price: carData.price,
+        })
 
         setOpen(true);
     }
@@ -37,6 +63,20 @@ function EditCar({ carData }: EditCarProps) {
 
     const handleSave = () => {
 
+        const url = carData._links.self.href;
+        const carEntry: CarEntry = {
+            car,
+            url,
+        }
+        mutate(carEntry);
+        setCar({
+            brand: "",
+            model: "",
+            colour: "",
+            registrationNumber: "",
+            modelYear: 0,
+            price: 0,
+        });
         setOpen(false);
     }
 
