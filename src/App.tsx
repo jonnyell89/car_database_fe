@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -8,22 +9,30 @@ import Cars from "./components/Cars";
 
 const queryClient = new QueryClient();
 
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark",
+  },
+});
+
 function App() {
 
   return (
     
     <Container maxWidth="xl">
-      <CssBaseline />
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6">
-            Car Database
-          </Typography>
-        </Toolbar>
-      </AppBar>
-      <QueryClientProvider client={queryClient}>
-        <Cars />
-      </QueryClientProvider>
+      <ThemeProvider theme={darkTheme}>
+        <CssBaseline />
+        <AppBar position="static">
+          <Toolbar>
+            <Typography variant="h6">
+              Car Database
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        <QueryClientProvider client={queryClient}>
+          <Cars />
+        </QueryClientProvider>
+      </ThemeProvider>
     </Container>
   )
 }

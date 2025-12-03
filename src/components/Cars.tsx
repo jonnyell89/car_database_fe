@@ -3,6 +3,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { DataGrid, } from "@mui/x-data-grid";
 import type { GridCellParams, GridColDef } from "@mui/x-data-grid";
 import { Snackbar } from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Tooltip from "@mui/material/Tooltip";
 import type { CarResponse } from "../types/CarResponse";
 import AddCar from "./AddCar";
 import EditCar from "./EditCar";
@@ -53,15 +56,17 @@ function Cars() {
             filterable: false,
             disableColumnMenu: true,
             renderCell: (params: GridCellParams) => (
-                <button 
-                    onClick={() => {
-                        if (window.confirm(`Are you sure you want to delete ${params.row.brand} ${params.row.model}?`)) {
-                            mutate(params.row._links.car.href);
-                        }
-                    }}
-                >
-                    Delete
-                </button>
+                <Tooltip title="Delete Car">
+                    <IconButton aria-label="delete" size="small"
+                        onClick={() => {
+                            if (window.confirm(`Are you sure you want to delete ${params.row.brand} ${params.row.model}?`)) {
+                                mutate(params.row._links.car.href);
+                            }
+                        }}
+                    >
+                        <DeleteIcon fontSize="small" />
+                    </IconButton>
+                </Tooltip>
             ),
         },
     ];

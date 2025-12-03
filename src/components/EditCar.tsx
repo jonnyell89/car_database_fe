@@ -4,6 +4,9 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import Tooltip from "@mui/material/Tooltip";
 import type { Car } from "../types/Car";
 import type { CarEntry } from "../types/CarEntry";
 import type { CarResponse } from "../types/CarResponse";
@@ -89,7 +92,11 @@ function EditCar({ carData }: EditCarProps) {
     return (
 
         <>
-            <Button size="small" onClick={handleClickOpen}>Edit</Button>
+            <Tooltip title="Edit Car">
+                <IconButton aria-label="edit" size="small" onClick={handleClickOpen}>
+                    <EditIcon fontSize="small" />
+                </IconButton>
+            </Tooltip>
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Edit Car</DialogTitle>
                 <CarDialogContent car={car} handleChange={handleChange} />
