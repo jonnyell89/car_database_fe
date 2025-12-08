@@ -3,6 +3,7 @@ import axios from "axios";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
+import SnackBar from "@mui/material/Snackbar";
 import Cars from "./Cars";
 
 type User = {
@@ -21,6 +22,8 @@ function Login() {
 
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+    const [open, setOpen] = useState(false);
+
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 
         setUser({...user, [event.target.name]: event.target.value});
@@ -38,7 +41,7 @@ function Login() {
             const jwtToken = response.headers.authorization;
 
             if (jwtToken) {
-                
+
                 sessionStorage.setItem("jwt", jwtToken);
                 setIsAuthenticated(true);
             }
@@ -47,6 +50,7 @@ function Login() {
         catch (error) {
             
             console.error(`Login failed: ${error}`);
+            setOpen(true);
         }
     }
 
@@ -65,6 +69,7 @@ function Login() {
                 <Button variant="outlined" color="primary" onClick={handleLogin}>
                     Login
                 </Button>
+                <SnackBar open={open} autoHideDuration={3000} onClose={() => setOpen(false)} message="Login failed: Please check your username and password" />
             </Stack>
         )
     }
