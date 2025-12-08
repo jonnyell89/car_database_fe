@@ -19,26 +19,35 @@ function Login() {
         password: "",
     })
 
-    const [isAuthenticated, setAuthentication] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 
         setUser({...user, [event.target.name]: event.target.value});
     }
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
 
-        axios.post(import.meta.env.VITE_API_URL + "/login", user, {
-            headers: { "Content-Type": "application/json" }
-        })
-        .then(res => {
-            const jwtToken = res.headers.authorization;
+        try {
+            
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/login`, user, {
+                
+                headers: { "Content-Type": "application/json" }
+            })
 
-            if (jwtToken !== null) {
+            const jwtToken = response.headers.authorization;
+
+            if (jwtToken) {
+                
                 sessionStorage.setItem("jwt", jwtToken);
-                setAuthentication(true);
+                setIsAuthenticated(true);
             }
-        })
+        }
+
+        catch (error) {
+            
+            console.error(`Login failed: ${error}`);
+        }
     }
 
     if (isAuthenticated) {
@@ -52,7 +61,7 @@ function Login() {
             
             <Stack spacing={2} alignItems="center" mt={2}>
                 <TextField name="username" label="Username" onChange={handleChange} />
-                <TextField type="username" name="password" label="Password" onChange={handleChange} />
+                <TextField type="password" name="password" label="Password" onChange={handleChange} />
                 <Button variant="outlined" color="primary" onClick={handleLogin}>
                     Login
                 </Button>
