@@ -54,9 +54,15 @@ function Login() {
         }
     }
 
+    const handleLogout = () => {
+
+        setIsAuthenticated(false);
+        sessionStorage.setItem("jwt", "");
+    }
+
     if (isAuthenticated) {
 
-        return <Cars />
+        return <Cars logout={handleLogout} />
     }
 
     else {

@@ -6,12 +6,19 @@ import { Snackbar } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Tooltip from "@mui/material/Tooltip";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 import type { CarResponse } from "../types/CarResponse";
 import AddCar from "./AddCar";
 import EditCar from "./EditCar";
 import { getCars, deleteCar } from "../api/carAPI";
 
-function Cars() {
+type CarsProps = {
+
+    logout?: () => void;
+}
+
+function Cars({ logout }: CarsProps) {
 
     const [open, setOpen] = useState(false);
 
@@ -92,7 +99,10 @@ function Cars() {
         return (
 
             <>
-                <AddCar />
+                <Stack direction="row" alignItems="center" justifyContent="space-between">
+                    <AddCar />
+                    <Button onClick={logout}>Logout</Button>
+                </Stack>
                 <DataGrid
                     rows={data}
                     columns={columns}
